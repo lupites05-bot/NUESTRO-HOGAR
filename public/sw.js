@@ -1,9 +1,9 @@
 // Service Worker básico para permitir que la app sea instalable como PWA (APK)
 const CACHE_NAME = 'nuestro-hogar-cache-v1';
 const assetsToCache = [
-  '/',
-  '/index.html',
-  '/manifest.json'
+  './',
+  'index.html',
+  'manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
