@@ -44,6 +44,9 @@ export default function App() {
   const [syncing, setSyncing] = useState(false);
   const [connectionError, setConnectionError] = useState(false);
 
+  // Check if we are running on GitHub Pages (static build with no Express server)
+  const isStaticPages = typeof window !== 'undefined' && window.location.hostname.endsWith('github.io');
+
   // Load state from backend Express API
   const fetchState = async (showSyncIndicator = false, isInitial = false) => {
     if (showSyncIndicator) setSyncing(true);
@@ -65,6 +68,21 @@ export default function App() {
     } catch (err) {
       console.error('Error fetching synchronization state:', err);
       setConnectionError(true);
+      
+      // Load fallback from localStorage on initial load if connection fails
+      if (isInitial) {
+        const local = localStorage.getItem('nuestro_hogar_local_data');
+        if (local) {
+          try {
+            const json = JSON.parse(local);
+            setData(json);
+            const names = json.userNames || ['Sofía', 'Mateo'];
+            setCurrentUser(names[0]);
+          } catch (e) {
+            console.error('Failed to parse local fallback data:', e);
+          }
+        }
+      }
     } finally {
       setLoading(false);
       if (showSyncIndicator) {
@@ -72,6 +90,13 @@ export default function App() {
       }
     }
   };
+
+  // Synchronize 'data' state changes to localStorage for offline resilience
+  useEffect(() => {
+    if (data && (data.shifts.length > 0 || data.events.length > 0 || data.shoppingList.length > 0 || data.expenses.length > 0 || data.reminders.length > 0)) {
+      localStorage.setItem('nuestro_hogar_local_data', JSON.stringify(data));
+    }
+  }, [data]);
 
   // Run initial state load and continuous background polling to sync in real time
   useEffect(() => {
@@ -508,13 +533,18 @@ export default function App() {
             onSync={() => fetchState(true)}
           />
 
-          {/* Connection Error Indicator */}
-          {connectionError && (
+          {/* Connection Error or Static Build (GitHub Pages) Indicator */}
+          {isStaticPages ? (
+            <div className="bg-amber-500 text-zinc-900 text-xs text-center py-2 px-4 flex flex-col items-center justify-center gap-1 leading-snug">
+              <span className="font-bold flex items-center gap-1">⚠️ Modo Local (GitHub Pages)</span>
+              <span>Para sincronizar en tiempo real con tu pareja, instala la app usando el enlace de la app compartida de AI Studio.</span>
+            </div>
+          ) : connectionError ? (
             <div className="bg-rose-500 text-white text-xs text-center py-2 px-4 flex items-center justify-center gap-1.5">
               <span className="animate-ping w-2 h-2 rounded-full bg-white block" />
               Reconectando con el servidor compartido de la pareja...
             </div>
-          )}
+          ) : null}
 
           {/* Tabs switch animations */}
           <main>
