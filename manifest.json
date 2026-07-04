@@ -1,0 +1,24 @@
+{
+  "short_name": "Nuestro Hogar",
+  "name": "Nuestro Hogar - Agenda y Finanzas",
+  "description": "Agenda y Finanzas Compartidas para Parejas",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3710/3710274.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3710/3710274.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#ffffff",
+  "theme_color": "#ec4899",
+  "display": "standalone",
+  "orientation": "portrait"
+}
