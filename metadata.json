@@ -1,0 +1,6 @@
+{
+  "name": "Nuestro Hogar",
+  "description": "Una aplicación elegante y minimalista diseñada exclusivamente para parejas. Incluye calendario de turnos y eventos, lista de la compra, control de gastos y recordatorios sincronizados en tiempo real.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
